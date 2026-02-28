@@ -24,7 +24,8 @@ import {
   Globe,
   Flame,
   Clock,
-  Phone
+  Phone,
+  MessageCircle
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -160,11 +161,80 @@ const SpecialPackageCard = ({
   </motion.div>
 );
 
+const WhatsAppPopup = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => (
+  <AnimatePresence>
+    {isOpen && (
+      <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={onClose}
+          className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
+        />
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.9, y: 20 }}
+          transition={{ type: "spring", damping: 25, stiffness: 300 }}
+          className="relative w-full max-w-md bg-white rounded-[32px] p-8 md:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.15)] flex flex-col items-center text-center overflow-hidden"
+        >
+          {/* Decorative background element */}
+          <div className="absolute -top-24 -right-24 size-48 bg-green-50 rounded-full blur-3xl opacity-50" />
+          
+          <div className="size-20 bg-green-50 rounded-3xl flex items-center justify-center mb-8 shadow-inner border border-green-100/50">
+            <MessageCircle className="size-10 text-green-500" />
+          </div>
+          
+          <h2 className="text-2xl md:text-3xl font-black text-slate-900 mb-4 leading-tight">
+            Need Help Booking Your Flight?
+          </h2>
+          
+          <p className="text-slate-500 font-medium mb-10 leading-relaxed">
+            Our travel experts are available on WhatsApp for instant assistance and the best offers.
+          </p>
+          
+          <a 
+            href={WHATSAPP_LINK}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={onClose}
+            className="w-full bg-[#25D366] hover:bg-[#20ba5a] text-white py-5 rounded-[24px] font-black shadow-[0_10px_20px_rgba(37,211,102,0.3)] transition-all active:scale-95 flex items-center justify-center gap-3 text-lg"
+          >
+            <MessageCircle className="size-6" />
+            Chat on WhatsApp
+          </a>
+          
+          <button 
+            onClick={onClose}
+            className="mt-6 text-slate-400 font-bold hover:text-slate-600 transition-colors text-sm uppercase tracking-widest"
+          >
+            Continue Browsing
+          </button>
+          
+          <button 
+            onClick={onClose}
+            className="absolute top-6 right-6 p-2 text-slate-300 hover:text-slate-500 transition-colors"
+          >
+            <X className="size-6" />
+          </button>
+        </motion.div>
+      </div>
+    )}
+  </AnimatePresence>
+);
+
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [email, setEmail] = useState('');
+  const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
+    // Show popup after 2.5 seconds
+    const timer = setTimeout(() => {
+      setShowPopup(true);
+    }, 2500);
+
     // Load Curator.io script if not already present
     const scriptId = 'curator-io-script';
     if (!document.getElementById(scriptId)) {
@@ -176,6 +246,8 @@ export default function App() {
       script.src = "https://cdn.curator.io/published/f59f8ec2-4bd1-4cfe-935e-b5b09c4ff086.js";
       document.body.appendChild(script);
     }
+
+    return () => clearTimeout(timer);
   }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -186,6 +258,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen font-sans selection:bg-primary/30 selection:text-primary">
+      <WhatsAppPopup isOpen={showPopup} onClose={() => setShowPopup(false)} />
       {/* Header */}
       <header className="px-4 md:px-10 py-8 sticky top-0 z-50">
         <nav className="clay-card max-w-7xl mx-auto px-6 md:px-10 py-4 md:py-5 flex items-center justify-between backdrop-blur-md bg-[#f8f1eb]/80">
