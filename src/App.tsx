@@ -42,7 +42,7 @@ const NavItem = ({ href, children }: { href: string; children: React.ReactNode }
 const ServiceCard = ({ icon: Icon, title, description, colorClass }: { icon: any, title: string, description: string, colorClass: string }) => (
   <motion.div 
     whileHover={{ y: -8 }}
-    className="clay-card p-10 hover:shadow-2xl transition-all group"
+    className="clay-card p-10 hover:shadow-2xl transition-all group transform-gpu"
   >
     <div className={`size-16 bg-white rounded-2xl flex items-center justify-center mb-8 shadow-inner border border-slate-100`}>
       <Icon className={`size-8 ${colorClass} font-bold`} />
@@ -73,7 +73,7 @@ const SpecialFlightOfferCard = ({
 }) => (
   <motion.div 
     whileHover={{ y: -10 }}
-    className={`relative p-8 rounded-[40px] flex flex-col items-center text-center shadow-2xl overflow-hidden ${theme} min-h-[400px] justify-between`}
+    className={`relative p-8 rounded-[40px] flex flex-col items-center text-center shadow-2xl overflow-hidden ${theme} min-h-[400px] justify-between transform-gpu`}
   >
     <div className="bg-white rounded-full px-8 py-3 mb-8 shadow-md">
       <span className="text-slate-900 font-black text-base uppercase tracking-tighter">{airline}</span>
@@ -121,10 +121,10 @@ const SpecialPackageCard = ({
 }) => (
   <motion.div 
     whileHover={{ y: -10 }}
-    className={`relative p-8 rounded-[40px] flex flex-col shadow-2xl overflow-hidden ${theme} min-h-[550px] min-w-[300px] md:min-w-[320px] text-white`}
+    className={`relative p-8 rounded-[40px] flex flex-col shadow-2xl overflow-hidden ${theme} min-h-[550px] min-w-[300px] md:min-w-[320px] text-white transform-gpu`}
   >
     <div className="size-16 rounded-2xl overflow-hidden mb-6 shadow-lg border-2 border-white/20">
-      <img src={image} alt={name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+      <img src={image} alt={name} className="w-full h-full object-cover" referrerPolicy="no-referrer" loading="lazy" />
     </div>
     
     <div className="mb-2">
@@ -165,23 +165,17 @@ export default function App() {
   const [email, setEmail] = useState('');
 
   useEffect(() => {
-    // Load Curator.io script
-    const script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.async = true;
-    script.charset = 'UTF-8';
-    script.src = "https://cdn.curator.io/published/f59f8ec2-4bd1-4cfe-935e-b5b09c4ff086.js";
-    
-    const firstScript = document.getElementsByTagName('script')[0];
-    if (firstScript && firstScript.parentNode) {
-      firstScript.parentNode.insertBefore(script, firstScript);
+    // Load Curator.io script if not already present
+    const scriptId = 'curator-io-script';
+    if (!document.getElementById(scriptId)) {
+      const script = document.createElement('script');
+      script.id = scriptId;
+      script.type = 'text/javascript';
+      script.async = true;
+      script.charset = 'UTF-8';
+      script.src = "https://cdn.curator.io/published/f59f8ec2-4bd1-4cfe-935e-b5b09c4ff086.js";
+      document.body.appendChild(script);
     }
-    
-    return () => {
-      if (script.parentNode) {
-        script.parentNode.removeChild(script);
-      }
-    };
   }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -348,8 +342,8 @@ export default function App() {
         </section>
 
         {/* Marquee */}
-        <div className="overflow-hidden bg-accent-gold py-5 shadow-xl mt-20 relative z-10">
-          <div className="flex whitespace-nowrap animate-marquee">
+        <div className="overflow-hidden bg-accent-gold py-5 shadow-xl mt-20 relative z-10 transform-gpu">
+          <div className="flex whitespace-nowrap animate-marquee will-change-transform">
             {[...Array(4)].map((_, i) => (
               <div key={i} className="flex gap-20 items-center mx-10">
                 <span className="text-white font-black text-xl md:text-2xl uppercase tracking-tighter flex items-center gap-4">
@@ -432,13 +426,13 @@ export default function App() {
         </section>
 
         {/* Instagram Feed Section (Moved below Special Flight Offers) */}
-        <section className="max-w-7xl mx-auto px-4 md:px-10 py-24 mb-32">
-          <div className="text-center mb-16">
+        <section className="max-w-7xl mx-auto px-4 md:px-10 py-12 md:py-24 mb-16 md:mb-32">
+          <div className="text-center mb-12 md:mb-16">
             <h2 className="text-4xl md:text-5xl font-black mb-4 text-slate-900">Follow Our Journey</h2>
             <p className="text-slate-500 font-bold uppercase tracking-widest text-sm">@SirpyTravels on Instagram</p>
           </div>
-          <div className="clay-card p-4 md:p-8 bg-white/40 backdrop-blur-sm">
-            <div id="curator-feed-default-feed-layout">
+          <div className="clay-card p-2 md:p-8 bg-white/40 backdrop-blur-sm min-h-[400px] w-full overflow-hidden">
+            <div id="curator-feed-default-feed-layout" className="w-full">
               <a href="https://curator.io" target="_blank" rel="noopener noreferrer" className="crt-logo crt-tag">Powered by Curator.io</a>
             </div>
           </div>
