@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --color-primary: #1e7a7a;
+  --color-accent-gold: #c5a028;
+  --color-accent-orange: #e6732e;
+  --color-bg-warm: #f2e8df;
+}
+
+@layer base {
+  body {
+    @apply bg-bg-warm text-slate-900 antialiased;
+    background-image: url('https://www.transparenttextures.com/patterns/natural-paper.png');
+  }
+}
+
+@layer components {
+  .clay-card {
+    @apply bg-[#f8f1eb] rounded-[36px] border border-white/60;
+    box-shadow: 20px 20px 60px #d9cec1, -20px -20px 60px #fffaf5;
+  }
+
+  .clay-inset {
+    @apply rounded-full border border-white/40;
+    box-shadow: inset 8px 8px 16px rgba(100, 60, 40, 0.06), inset -8px -8px 16px rgba(255, 255, 255, 0.9);
+  }
+
+  .clay-btn-3d {
+    @apply bg-primary text-white font-bold transition-all duration-300;
+    box-shadow: 0 10px 20px rgba(30, 122, 122, 0.4), inset 0 -4px 0 rgba(0, 0, 0, 0.25), inset 0 2px 0 rgba(255, 255, 255, 0.3);
+  }
+
+  .clay-btn-3d:active {
+    @apply translate-y-[3px];
+    box-shadow: 0 5px 10px rgba(30, 122, 122, 0.4), inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+  }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 35s linear infinite;
+}
